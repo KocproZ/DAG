@@ -37,14 +37,22 @@ public class DAG<T> {
         return node;
     }
 
-    public void findRoots() {
+    /**
+     * Finds root nodes and checks for cycles
+     */
+    public void update() {
+        findRoots();
+        checkForCycles();
+    }
+
+    private void findRoots() {
         for (Node<T> n : nodes.values()) {
             if (n.getParents().size() == 0)
                 roots.add(n);
         }
     }
 
-    public void checkForCycles() {
+    private void checkForCycles() {
         List<Node<T>> cycleCrawlerPath = new ArrayList<>();
         for (Node<T> n : roots) {
             checkForCycles(n, cycleCrawlerPath);

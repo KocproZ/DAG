@@ -37,8 +37,7 @@ public class DAGTest {
         System.out.println("Generating graph...");
 
         long startTime = System.currentTimeMillis();
-        dag.findRoots();
-        dag.checkForCycles();
+        dag.update();
         long endTime = System.currentTimeMillis();
 
         System.out.println("Graph with " + dag.getNodes().size() + " nodes generated in " + (endTime - startTime) + " miliseconds.");
