@@ -80,7 +80,6 @@ public class DAG<T> {
         Node<T> childNode = getNode(child);
         if (parentNode == null) parentNode = createNode(parent);
         if (childNode == null) childNode = createNode(child);
-        childNode.addParent(parentNode);
         parentNode.addChild(childNode);
     }
 
