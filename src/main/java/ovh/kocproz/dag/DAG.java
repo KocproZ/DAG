@@ -17,9 +17,12 @@ public class DAG<T> {
         roots = new ArrayList<>();
     }
 
-    public static <T> void visitChildrenAndForceThemToWorkForYou(Node<T> node, Consumer<Node<T>> consumer) {
-        consumer.accept(node);
-        node.getChildren().forEach(n -> visitChildrenAndForceThemToWorkForYou(n, consumer));
+    public void visit(Consumer<Node<T>> consumer) {
+        Set<Node<T>> visited = new HashSet<>();
+        for (Node<T> node : roots) {
+            consumer.accept(node);
+            node.getChildren().forEach(n -> n.visit(consumer, visited));
+        }
     }
 
     /**

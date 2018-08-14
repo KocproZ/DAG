@@ -1,7 +1,10 @@
 package ovh.kocproz.dag;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Parent --> Child
@@ -19,6 +22,24 @@ public class Node<T> {
         this.object = object;
         parents = new LinkedList<>();
         children = new LinkedList<>();
+    }
+
+    public void visit(Consumer<Node<T>> consumer) {
+        Set<Node<T>> visited = new HashSet<>();
+        consumer.accept(this);
+        for (Node<T> node : children) {
+            consumer.accept(node);
+            node.getChildren().forEach(n -> n.visit(consumer, visited));
+        }
+    }
+
+    void visit(Consumer<Node<T>> consumer, Set<Node<T>> visited) {
+        consumer.accept(this);
+        visited.add(this);
+        for (Node<T> node : children) {
+            if (visited.contains(node)) continue;
+            node.visit(consumer, visited);
+        }
     }
 
     public T getObject() {

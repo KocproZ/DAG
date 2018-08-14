@@ -43,7 +43,7 @@ public class DAGTest {
 
         System.out.println("Graph with " + dag.getNodes().size() + " nodes generated in " + (endTime - startTime) + " miliseconds.");
 
-        DAG.visitChildrenAndForceThemToWorkForYou(dag.getNode("Node2"), node -> System.out.println(node.toString()));
+        dag.visit(node -> System.out.println(node.toString()));
     }
 
     @Test
