@@ -17,9 +17,11 @@ public class Node<T> {
     private List<Node<T>> parents;
     private List<Node<T>> children;
     private T object;
+    private DAG<T> dag;
 
-    protected Node(T object) {
+    protected Node(T object, DAG<T> dag) {
         this.object = object;
+        this.dag = dag;
         parents = new LinkedList<>();
         children = new LinkedList<>();
     }
@@ -54,10 +56,9 @@ public class Node<T> {
         return children;
     }
 
-    public void addParents(Node<T>... dep) {
-        for (Node<T> n : dep) {
-            n.addChild(this);
-            parents.add(n);
+    public void addParents(Node<T>... par) {
+        for (Node<T> n : par) {
+            addParent(n);
         }
     }
 
