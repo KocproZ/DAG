@@ -61,14 +61,14 @@ public class Node<T> {
         }
     }
 
-    void addParent(Node<T> parent) {
+    public void addParent(Node<T> parent) {
         if (parent == this) throw new CycleFoundException(this.toString() + "->" + this.toString());
         parents.add(parent);
         if (parent.getChildren().contains(this)) return;
         parent.addChild(this);
     }
 
-    void addChild(Node<T> child) {
+    public void addChild(Node<T> child) {
         if (child == this) throw new CycleFoundException(this.toString() + "->" + this.toString());
         children.add(child);
         if (child.getParents().contains(this)) return;

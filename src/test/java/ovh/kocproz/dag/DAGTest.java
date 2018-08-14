@@ -43,6 +43,9 @@ public class DAGTest {
 
         System.out.println("Graph with " + dag.getNodes().size() + " nodes generated in " + (endTime - startTime) + " miliseconds.");
 
+        dag.addEdge("Node0", "Node1");
+        dag.addEdge("Node0", "Node-1");
+
         dag.visit(node -> System.out.println(node.toString()));
     }
 

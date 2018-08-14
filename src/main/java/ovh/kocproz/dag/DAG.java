@@ -37,7 +37,7 @@ public class DAG<T> {
         return node;
     }
 
-    void findRoots() {
+    public void findRoots() {
         for (Node<T> n : nodes.values()) {
             if (n.getParents().size() == 0)
                 roots.add(n);
@@ -64,18 +64,16 @@ public class DAG<T> {
     }
 
     /**
-     * n1 --> n2
-     *
-     * @param o1 Parent
-     * @param o2 Child
+     * @param parent Parent
+     * @param child Child
      */
-    public void addEdge(T o1, T o2) {
-        Node<T> n1 = getNode(o1);
-        Node<T> n2 = getNode(o2);
-        if (n1 == null) n1 = createNode(o1);
-        if (n2 == null) n2 = createNode(o2);
-        n2.addParent(n1);
-        n1.addChild(n2);
+    public void addEdge(T parent, T child) {
+        Node<T> parentNode = getNode(parent);
+        Node<T> childNode = getNode(child);
+        if (parentNode == null) parentNode = createNode(parent);
+        if (childNode == null) childNode = createNode(child);
+        childNode.addParent(parentNode);
+        parentNode.addChild(childNode);
     }
 
     public Node<T> getNode(T key) {
@@ -86,7 +84,7 @@ public class DAG<T> {
         return nodes.values();
     }
 
-    String getPath(List<Node<T>> path) {
+    private String getPath(List<Node<T>> path) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < path.size() - 1; i++) {
             sb.append(path.get(i).getObject().toString());
