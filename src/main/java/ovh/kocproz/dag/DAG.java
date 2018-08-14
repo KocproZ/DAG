@@ -1,6 +1,7 @@
 package ovh.kocproz.dag;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * @author KocproZ
@@ -8,12 +9,17 @@ import java.util.*;
  */
 public class DAG<T> {
 
-    private Map<Object, Node<T>> nodes;
+    private Map<T, Node<T>> nodes;
     private List<Node<T>> roots;
 
     public DAG() {
         nodes = new LinkedHashMap<>();
         roots = new ArrayList<>();
+    }
+
+    public static <T> void visitChildrenAndForceThemToWorkForYou(Node<T> node, Consumer<Node<T>> consumer) {
+        consumer.accept(node);
+        node.getChildren().forEach(n -> visitChildrenAndForceThemToWorkForYou(n, consumer));
     }
 
     /**
@@ -28,12 +34,14 @@ public class DAG<T> {
         return node;
     }
 
-    void generateGraph() {
+    void findRoots() {
         for (Node<T> n : nodes.values()) {
             if (n.getParents().size() == 0)
                 roots.add(n);
         }
+    }
 
+    public void checkForCycles() {
         List<Node<T>> cycleCrawlerPath = new ArrayList<>();
         for (Node<T> n : roots) {
             checkForCycles(n, cycleCrawlerPath);
@@ -58,12 +66,12 @@ public class DAG<T> {
      * @param n1 Parent
      * @param n2 child
      */
-    public void addEdge(Object n1, Object n2) {
+    public void addEdge(T n1, T n2) {
         nodes.get(n2).addParent(nodes.get(n1));
         nodes.get(n1).addChild(nodes.get(n2));
     }
 
-    public Node<T> getNode(Object key) {
+    public Node<T> getNode(T key) {
         return nodes.get(key);
     }
 

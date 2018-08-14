@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author KocproZ
@@ -27,7 +27,7 @@ public class DAGTest {
 
         Random r = new Random();
         dag.createNode("Node0");
-        for (int i = 1; i < 501; i++) {
+        for (int i = 1; i < 4; i++) {
             Node<String> n = dag.createNode("Node" + i);
             for (int j = 0; j < (i / 2); j++) {
                 n.addChild(dag.getNode("Node" + r.nextInt(i)));
@@ -37,17 +37,19 @@ public class DAGTest {
         System.out.println("Generating graph...");
 
         long startTime = System.currentTimeMillis();
-        dag.generateGraph();
+        dag.findRoots();
+        dag.checkForCycles();
         long endTime = System.currentTimeMillis();
 
         System.out.println("Graph with " + dag.getNodes().size() + " nodes generated in " + (endTime - startTime) + " miliseconds.");
 
+        DAG.visitChildrenAndForceThemToWorkForYou(dag.getNode("Node2"), node -> System.out.println(node.toString()));
     }
 
     @Test
     public void createNodeTest() {
         Node<String> node = dag.createNode("Node0");
-        assertTrue(dag.getNodes().size() == 1);
+        assertEquals(1, dag.getNodes().size());
     }
 
 }

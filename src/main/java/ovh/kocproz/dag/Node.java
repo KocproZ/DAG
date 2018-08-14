@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class Node<T> {
 
-    private List<Node> parents;
-    private List<Node> children;
+    private List<Node<T>> parents;
+    private List<Node<T>> children;
     private T object;
 
     protected Node(T object) {
@@ -25,29 +25,33 @@ public class Node<T> {
         return object;
     }
 
-    void addParent(Node parent) {
-        parent.addChild(this);
-        parents.add(parent);
-    }
-
-    List<Node> getParents() {
+    List<Node<T>> getParents() {
         return parents;
     }
 
-    List<Node> getChildren() {
+    List<Node<T>> getChildren() {
         return children;
     }
 
-    public void addParents(Node... dep) {
-        for (Node n : dep) {
+    public void addParents(Node<T>... dep) {
+        for (Node<T> n : dep) {
             n.addChild(this);
             parents.add(n);
         }
     }
 
-    void addChild(Node dep) {
-        if (dep == this) throw new CycleFoundException(this.toString() + "->" + this.toString());
-        children.add(dep);
+    void addParent(Node<T> parent) {
+        if (parent == this) throw new CycleFoundException(this.toString() + "->" + this.toString());
+        parents.add(parent);
+        if (parent.getChildren().contains(this)) return;
+        parent.addChild(this);
+    }
+
+    void addChild(Node<T> child) {
+        if (child == this) throw new CycleFoundException(this.toString() + "->" + this.toString());
+        children.add(child);
+        if (child.getParents().contains(this)) return;
+        child.addParent(this);
     }
 
     @Override
@@ -62,7 +66,7 @@ public class Node<T> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Node)
-            return object.equals(((Node) obj).getObject());
+            return object.equals(((Node<T>) obj).getObject());
         else return false;
     }
 }
