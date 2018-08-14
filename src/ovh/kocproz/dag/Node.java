@@ -4,51 +4,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
+ * Parent --> Child
+ *
  * @author KocproZ
  * Created 2018-08-14 at 10:35
  */
 public class Node {
 
-    List<Node> dependencies;
-    List<Node> dependants;
+    List<Node> parents;
+    List<Node> children;
     Object object;
 
     public Node(Object object) {
         this.object = object;
-        dependencies = new ArrayList<Node>();
-        dependants = new ArrayList<Node>();
+        parents = new ArrayList<Node>();
+        children = new ArrayList<Node>();
     }
 
     public Object getObject() {
         return object;
     }
 
-    void addDependency(Node dep) {
-        dep.addDependant(this);
-        dependencies.add(dep);
+    void addParent(Node parent) {
+        parent.addChild(this);
+        parents.add(parent);
     }
 
-    List<Node> getDependencies() {
-        return dependencies;
+    List<Node> getParents() {
+        return parents;
     }
 
-    public void addDependencies(Node... dep) {
+    List<Node> getChildren() {
+        return children;
+    }
+
+    public void addParents(Node... dep) {
         for (Node n : dep) {
-            n.addDependant(this);
-            dependencies.add(n);
+            n.addChild(this);
+            parents.add(n);
         }
     }
 
-    private void addDependant(Node dep) {
+    void addChild(Node dep) {
         if (dep == this) throw new CycleFoundException(this.toString() + "->" + this.toString());
-        dependants.add(dep);
+        children.add(dep);
     }
 
     @Override
     public String toString() {
         return "Node{" +
-                "dependencies=" + dependencies.size() +
-                ", dependants=" + dependants.size() +
+                "parents=" + parents.size() +
+                ", children=" + children.size() +
                 ", object=" + object.toString() +
                 '}';
     }

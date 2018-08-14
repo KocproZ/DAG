@@ -13,15 +13,16 @@ public class Main {
         for (int i = 1; i < 10001; i++) {
             dag.insertNode(n);
             n = new Node("Node" + i);
-            n.addDependency(dag.nodes.get(r.nextInt(i)));
+            n.addParent(dag.getNode("Node" + r.nextInt(i)));
         }
 
+        System.out.println("Generating graph...");
 
         long startTime = System.currentTimeMillis();
         dag.generateGraph();
         long endTime = System.currentTimeMillis();
 
-        System.out.println("Graph with " + dag.nodes.size() + " nodes generated in " + (endTime - startTime) + " miliseconds.");
+        System.out.println("Graph with " + dag.getNodes().size() + " nodes generated in " + (endTime - startTime) + " miliseconds.");
 
 //        printNodes(dag);
 //        printQueue(dag);
@@ -35,7 +36,7 @@ public class Main {
 
     static void printNodes(DAG dag) {
         System.out.println("=== List on Nodes ===");
-        for (Node n : dag.nodes)
+        for (Node n : dag.getNodes())
             System.out.println(n.toString());
     }
 

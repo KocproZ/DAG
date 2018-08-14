@@ -1,9 +1,6 @@
 package ovh.kocproz.dag;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author KocproZ
@@ -11,39 +8,37 @@ import java.util.Queue;
  */
 public class DAG {
 
-    List<Node> nodes;
+    private Map<Object, Node> nodes;
+    private List<Node> roots;
     Queue<Node> output;
 
     public DAG() {
-        nodes = new ArrayList<Node>();
-        output = new ArrayDeque<Node>();
+        nodes = new LinkedHashMap<>();
+        roots = new ArrayList<>();
+        output = new ArrayDeque<>();
     }
 
     void insertNode(Node node) {
-        nodes.add(node);
+        nodes.put(node.getObject(), node);
     }
 
     void generateGraph() {
         List<Node> cycleCrawlerPath = new ArrayList<>();
-        for (Node n : nodes) {
+        for (Node n : nodes.values()) {
             checkForCycles(n, cycleCrawlerPath);
         }
 
-        List<Node> tmpNodes = new ArrayList<Node>(nodes);
+        List<Node> tmpNodes = new ArrayList<Node>(nodes.values());
         List<Node> toRemove = new ArrayList<Node>();
-
-        for (Node n : nodes)
-            if (n.getDependencies().size() == 0) {
-                output.add(n);
-                tmpNodes.remove(n);
-            }
 
         while (nodes.size() != output.size()) {
             for (Node n : tmpNodes) {
-                if (output.containsAll(n.getDependencies())) {
+                if (output.containsAll(n.getParents()) || n.getParents().size() == 0) {
                     output.add(n);
                     toRemove.add(n);
                 }
+                if (n.getParents().size() == 0)
+                    roots.add(n);
             }
             tmpNodes.removeAll(toRemove);
             toRemove.clear();
@@ -56,10 +51,29 @@ public class DAG {
             throw new CycleFoundException(getPath(path.subList(path.indexOf(n), path.size())));
         }
         path.add(n);
-        n.getDependencies().forEach(node -> {
+        n.getParents().forEach(node -> {
             checkForCycles(node, path);
         });
         path.remove(path.size() - 1);
+    }
+
+    /**
+     * n1-->n2
+     *
+     * @param n1
+     * @param n2
+     */
+    public void addEdge(Object n1, Object n2) {
+        nodes.get(n2).addParent(nodes.get(n1));
+        nodes.get(n1).addChild(nodes.get(n2));
+    }
+
+    public Node getNode(Object key) {
+        return nodes.get(key);
+    }
+
+    public Collection<Node> getNodes() {
+        return nodes.values();
     }
 
     String getPath(List<Node> path) {
