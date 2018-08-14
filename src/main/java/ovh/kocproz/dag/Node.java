@@ -17,11 +17,9 @@ public class Node<T> {
     private List<Node<T>> parents;
     private List<Node<T>> children;
     private T object;
-    private DAG<T> dag;
 
-    protected Node(T object, DAG<T> dag) {
+    protected Node(T object) {
         this.object = object;
-        this.dag = dag;
         parents = new LinkedList<>();
         children = new LinkedList<>();
     }
