@@ -66,12 +66,16 @@ public class DAG<T> {
     /**
      * n1 --> n2
      *
-     * @param n1 Parent
-     * @param n2 child
+     * @param o1 Parent
+     * @param o2 Child
      */
-    public void addEdge(T n1, T n2) {
-        nodes.get(n2).addParent(nodes.get(n1));
-        nodes.get(n1).addChild(nodes.get(n2));
+    public void addEdge(T o1, T o2) {
+        Node<T> n1 = getNode(o1);
+        Node<T> n2 = getNode(o2);
+        if (n1 == null) n1 = createNode(o1);
+        if (n2 == null) n2 = createNode(o2);
+        n2.addParent(n1);
+        n1.addChild(n2);
     }
 
     public Node<T> getNode(T key) {
