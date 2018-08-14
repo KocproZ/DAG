@@ -6,46 +6,41 @@ import java.util.*;
  * @author KocproZ
  * Created 2018-08-14 at 10:35
  */
-public class DAG {
+public class DAG<T> {
 
-    private Map<Object, Node> nodes;
-    private List<Node> roots;
-    Queue<Node> output;
+    private Map<Object, Node<T>> nodes;
+    private List<Node<T>> roots;
 
     public DAG() {
         nodes = new LinkedHashMap<>();
         roots = new ArrayList<>();
-        output = new ArrayDeque<>();
     }
 
-    void insertNode(Node node) {
-        nodes.put(node.getObject(), node);
+    /**
+     * Creates node with given object
+     *
+     * @param object to create node with
+     * @return Node with given object
+     */
+    public Node<T> createNode(T object) {
+        Node<T> node = new Node<>(object);
+        nodes.put(object, node);
+        return node;
     }
 
     void generateGraph() {
-        List<Node> cycleCrawlerPath = new ArrayList<>();
-        for (Node n : nodes.values()) {
-            checkForCycles(n, cycleCrawlerPath);
+        for (Node<T> n : nodes.values()) {
+            if (n.getParents().size() == 0)
+                roots.add(n);
         }
 
-        List<Node> tmpNodes = new ArrayList<Node>(nodes.values());
-        List<Node> toRemove = new ArrayList<Node>();
-
-        while (nodes.size() != output.size()) {
-            for (Node n : tmpNodes) {
-                if (output.containsAll(n.getParents()) || n.getParents().size() == 0) {
-                    output.add(n);
-                    toRemove.add(n);
-                }
-                if (n.getParents().size() == 0)
-                    roots.add(n);
-            }
-            tmpNodes.removeAll(toRemove);
-            toRemove.clear();
+        List<Node<T>> cycleCrawlerPath = new ArrayList<>();
+        for (Node<T> n : roots) {
+            checkForCycles(n, cycleCrawlerPath);
         }
     }
 
-    private void checkForCycles(Node n, List<Node> path) {
+    private void checkForCycles(Node<T> n, List<Node<T>> path) {
         if (path.contains(n)) {
             path.add(n);
             throw new CycleFoundException(getPath(path.subList(path.indexOf(n), path.size())));
@@ -58,25 +53,25 @@ public class DAG {
     }
 
     /**
-     * n1-->n2
+     * n1 --> n2
      *
-     * @param n1
-     * @param n2
+     * @param n1 Parent
+     * @param n2 child
      */
     public void addEdge(Object n1, Object n2) {
         nodes.get(n2).addParent(nodes.get(n1));
         nodes.get(n1).addChild(nodes.get(n2));
     }
 
-    public Node getNode(Object key) {
+    public Node<T> getNode(Object key) {
         return nodes.get(key);
     }
 
-    public Collection<Node> getNodes() {
+    public Collection<Node<T>> getNodes() {
         return nodes.values();
     }
 
-    String getPath(List<Node> path) {
+    String getPath(List<Node<T>> path) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < path.size() - 1; i++) {
             sb.append(path.get(i).getObject().toString());

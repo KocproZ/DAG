@@ -17,6 +17,8 @@ hs_err_pid*
 # IntelliJ project files
 .idea
 *.iml
+*.ipr
+*.iws
 out
 gen### Example user template template
 ### Example user template

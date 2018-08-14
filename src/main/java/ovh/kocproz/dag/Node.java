@@ -1,28 +1,27 @@
 package ovh.kocproz.dag;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * Parent --> Child
  *
  * @author KocproZ
  * Created 2018-08-14 at 10:35
  */
-public class Node {
+public class Node<T> {
 
-    List<Node> parents;
-    List<Node> children;
-    Object object;
+    private List<Node> parents;
+    private List<Node> children;
+    private T object;
 
-    public Node(Object object) {
+    protected Node(T object) {
         this.object = object;
-        parents = new ArrayList<Node>();
-        children = new ArrayList<Node>();
+        parents = new LinkedList<>();
+        children = new LinkedList<>();
     }
 
-    public Object getObject() {
+    public T getObject() {
         return object;
     }
 
