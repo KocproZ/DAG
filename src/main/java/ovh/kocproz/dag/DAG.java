@@ -41,6 +41,7 @@ public class DAG<T> {
      * Finds root nodes and checks for cycles
      */
     public void update() {
+        roots.clear();
         findRoots();
         checkForCycles();
     }

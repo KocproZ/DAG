@@ -77,9 +77,9 @@ public class Node<T> {
     @Override
     public String toString() {
         return "Node{" +
-                "parents=" + parents.size() +
+                "object=" + object.toString() +
+                ", parents=" + parents.size() +
                 ", children=" + children.size() +
-                ", object=" + object.toString() +
                 '}';
     }
 

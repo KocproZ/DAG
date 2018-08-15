@@ -45,6 +45,9 @@ public class DAGTest {
         dag.addEdge("Node0", "Node1");
         dag.addEdge("Node0", "Node-1");
 
+        dag.update();
+        dag.visit(node -> System.out.println(node.toString()));
+        System.out.println();
         dag.visit(node -> System.out.println(node.toString()));
     }
 
