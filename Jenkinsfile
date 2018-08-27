@@ -1,7 +1,7 @@
 node {
     stage('Prepare') {
         properties([authorizationMatrix(['hudson.model.Item.Discover:authenticated', 'hudson.model.Item.Read:authenticated', 'hudson.model.Item.ViewStatus:authenticated']), buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '20')),
-                    disableConcurrentBuilds(), pipelineTriggers([[$class: 'PeriodicFolderTrigger', interval: '1d']])])
+                    disableConcurrentBuilds(), pipelineTriggers([[$class: 'PeriodicFolderTrigger', interval: '1d']]), pipelineTriggers([githubPush()])])
         checkout scm
         sh './gradlew clean'
     }
