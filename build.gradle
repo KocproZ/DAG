@@ -1,19 +1,17 @@
 plugins {
     id 'java-library'
-    id 'idea'
     id 'java'
 }
 
 dependencies {
-//    api ''
-
     testImplementation 'junit:junit:4.12'
 }
 
 repositories {
-//    jcenter()
     mavenCentral()
 }
+
+version = '0.1'
 
 jar {
     manifest {
@@ -22,4 +20,3 @@ jar {
     }
 }
 
-version = '0.1'

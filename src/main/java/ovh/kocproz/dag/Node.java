@@ -78,8 +78,8 @@ public class Node<T> {
     public String toString() {
         return "Node{" +
                 "object=" + object.toString() +
-                ", parents=" + parents.size() +
-                ", children=" + children.size() +
+//                ", parents=" + parents.size() +
+//                ", children=" + children.size() +
                 '}';
     }
 

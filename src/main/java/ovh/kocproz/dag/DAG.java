@@ -17,6 +17,11 @@ public class DAG<T> {
         roots = new ArrayList<>();
     }
 
+    /**
+     * Performs Depth-first search and executes lambda on every node
+     *
+     * @param consumer lambda to be executed on nodes
+     */
     public void visit(Consumer<Node<T>> consumer) {
         Set<Node<T>> visited = new HashSet<>();
         for (Node<T> node : roots) {
@@ -39,8 +44,9 @@ public class DAG<T> {
 
     /**
      * Finds root nodes and checks for cycles
+     * @throws CycleFoundException if cycle is found
      */
-    public void update() {
+    public void update() throws CycleFoundException {
         roots.clear();
         findRoots();
         checkForCycles();
@@ -53,7 +59,14 @@ public class DAG<T> {
         }
     }
 
-    private void checkForCycles() {
+    /**
+     * Checks if graph contains cycles
+     *
+     * @throws CycleFoundException if cycle is found
+     */
+    private void checkForCycles() throws CycleFoundException {
+        if (roots.isEmpty() && nodes.size() > 1)
+            throw new CycleFoundException("No childless node found to be selected as root");
         List<Node<T>> cycleCrawlerPath = new ArrayList<>();
         for (Node<T> n : roots) {
             checkForCycles(n, cycleCrawlerPath);
@@ -105,7 +118,7 @@ public class DAG<T> {
     @Override
     public String toString() {
         return "DAG{" +
-                "nodes=" + nodes.size() +
+                "nodes.size=" + nodes.size() +
                 '}';
     }
 }
