@@ -24,6 +24,11 @@ public class Node<T> {
         children = new LinkedList<>();
     }
 
+    /**
+     * Performs Depth-first search on children and executes lambda on every node
+     *
+     * @param consumer lambda to be executed on nodes
+     */
     public void visit(Consumer<Node<T>> consumer) {
         Set<Node<T>> visited = new HashSet<>();
         consumer.accept(this);

@@ -18,7 +18,7 @@ public class DAG<T> {
     }
 
     /**
-     * Performs Depth-first search and executes lambda on every node
+     * Performs Depth-first search from roots and executes lambda on every node
      *
      * @param consumer lambda to be executed on nodes
      */
